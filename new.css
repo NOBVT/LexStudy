@@ -1,0 +1,2040 @@
+/*
+ * ╔══════════════════════════════════════════════════════════╗
+ * ║  LEXIUM — Plataforma de Estudos Jurídicos               ║
+ * ║  Design Language: Auditório Judicial                    ║
+ * ║  Conceito: O Tribunal como Interface de Estudo          ║
+ * ╚══════════════════════════════════════════════════════════╝
+ *
+ * Navegação: Frisa Judicial (topo, horizontal, como uma bancada)
+ * Layout:    Zona de Audiência — contexto | palco | réplica
+ * Estética:  Gravitas modernizado — ouro antigo, marfim e noite
+ */
+
+/* ═══════════════════════════════════════════════════════════
+   1. TOKENS — Variáveis CSS
+═══════════════════════════════════════════════════════════ */
+:root {
+  /* Fundo & Profundidade */
+  --void:           #05060b;
+  --abyss:          #07090f;
+  --bench:          #0b0e18;
+  --chamber:        #0f1424;
+  --surface:        #131929;
+  --surface-raise:  #182032;
+  --surface-float:  #1e293b;
+
+  /* Texto */
+  --parchment:      #f0e6c8;
+  --ink:            #d8d0bc;
+  --muted:          #7d8ea4;
+  --ghost:          #3d4d61;
+
+  /* Ouro Judicial */
+  --gold:           #c9a84c;
+  --gold-bright:    #e8c86a;
+  --gold-dim:       #785c22;
+  --gold-pale:      rgba(201, 168, 76, .09);
+  --gold-glow:      rgba(201, 168, 76, .16);
+  --gold-rule:      rgba(201, 168, 76, .22);
+  --gold-text:      rgba(201, 168, 76, .85);
+
+  /* Selos */
+  --seal:           #a81c1c;
+  --seal-pale:      rgba(168, 28, 28, .12);
+  --emerald:        #1e7a60;
+  --emerald-pale:   rgba(30, 122, 96, .12);
+  --violet:         #5c4fa8;
+  --violet-pale:    rgba(92, 79, 168, .12);
+  --steel:          #2a4a6e;
+  --steel-pale:     rgba(42, 74, 110, .12);
+
+  /* Bordas & Estrutura */
+  --rule:           rgba(255, 255, 255, .065);
+  --rule-gold:      rgba(201, 168, 76, .20);
+  --rule-bright:    rgba(255, 255, 255, .14);
+
+  /* Tipografia */
+  --font-serif:     "EB Garamond", "Garamond", "Palatino Linotype", Georgia, serif;
+  --font-sans:      "DM Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-label:     "DM Mono", "JetBrains Mono", "Courier New", monospace;
+
+  /* Sombras */
+  --shadow-sm:   0 2px 8px rgba(0, 0, 0, .35);
+  --shadow-md:   0 8px 28px rgba(0, 0, 0, .48), 0 1px 0 rgba(201,168,76,.04) inset;
+  --shadow-lg:   0 24px 72px rgba(0, 0, 0, .60), 0 1px 0 rgba(255,255,255,.04) inset;
+  --shadow-gold: 0 0 40px rgba(201, 168, 76, .12);
+
+  /* Raios */
+  --r-xs:  3px;
+  --r-sm:  6px;
+  --r-md:  12px;
+  --r-lg:  18px;
+  --r-xl:  26px;
+
+  /* Transições */
+  --ease:       cubic-bezier(.4, 0, .2, 1);
+  --ease-out:   cubic-bezier(.2, .9, .2, 1);
+  --ease-spring:cubic-bezier(.34, 1.56, .64, 1);
+  --dur-fast:   .14s;
+  --dur-mid:    .28s;
+  --dur-slow:   .52s;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   2. RESET & BASE
+═══════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html, body { overflow-x: hidden; }
+
+body {
+  min-height: 100vh;
+  background-color: var(--abyss);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+a  { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+
+button, input, textarea, select { font: inherit; cursor: pointer; outline: none; }
+img { display: block; max-width: 100%; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   3. ATMOSFERA — Fundo e Ambiente
+═══════════════════════════════════════════════════════════ */
+
+/* Textura de câmara — marmoreado sutil em camadas */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    /* Reflexo de cúpula */
+    radial-gradient(ellipse 140% 60% at 50% -20%,
+      rgba(201, 168, 76, .055) 0%,
+      transparent 56%),
+    /* Luz lateral esquerda */
+    radial-gradient(ellipse 40% 80% at -4% 50%,
+      rgba(201, 168, 76, .04) 0%,
+      transparent 50%),
+    /* Luz lateral direita */
+    radial-gradient(ellipse 40% 80% at 104% 50%,
+      rgba(92, 79, 168, .04) 0%,
+      transparent 50%),
+    /* Gradiente de profundidade */
+    linear-gradient(180deg,
+      rgba(11, 14, 24, .0) 0%,
+      rgba(5, 6, 11, .6) 100%);
+}
+
+/* Grade arquitectónica — linhas finas da sala */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(90deg,  rgba(201,168,76,.025) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 88% 82% at 50% 30%, #000, transparent);
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   4. TIPOGRAFIA — Hierarquia Jurídica
+═══════════════════════════════════════════════════════════ */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--parchment);
+  letter-spacing: -.01em;
+}
+
+h1 { font-size: clamp(1.8rem, 3vw, 2.6rem); }
+h2 { font-size: clamp(1.15rem, 1.8vw, 1.48rem); }
+h3 { font-size: 1.08rem; }
+
+p { color: var(--muted); overflow-wrap: anywhere; }
+strong { color: var(--ink); }
+small { font-size: .78rem; }
+
+.eyebrow {
+  display: block;
+  font-family: var(--font-label);
+  font-size: .64rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Links em corpo de texto */
+p a, li a, .content-link {
+  color: var(--gold-bright);
+  text-decoration: underline;
+  text-decoration-color: var(--gold-rule);
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease);
+}
+p a:hover, li a:hover, .content-link:hover {
+  color: var(--parchment);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   5. FRISA JUDICIAL — Navegação Superior (conceito único)
+   Inspirado na bancada parlamentar: cada módulo é um "assento"
+═══════════════════════════════════════════════════════════ */
+.judicial-bench {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: stretch;
+  min-height: 62px;
+  background:
+    linear-gradient(180deg,
+      rgba(11, 14, 24, .97) 0%,
+      rgba(9, 12, 20, .94) 100%);
+  border-bottom: 1px solid var(--rule-gold);
+  backdrop-filter: blur(28px) saturate(140%);
+  box-shadow:
+    0 1px 0 rgba(201,168,76,.08),
+    0 8px 32px rgba(0,0,0,.52);
+}
+
+/* Ornamento de topo — linha dourada fina */
+.judicial-bench::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--gold-dim) 12%,
+    var(--gold) 38%,
+    var(--gold-bright) 50%,
+    var(--gold) 62%,
+    var(--gold-dim) 88%,
+    transparent 100%);
+}
+
+/* Brasão — identidade da plataforma */
+.bench-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  border-right: 1px solid var(--rule-gold);
+}
+
+.bench-seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--void), 0 0 0 3px var(--gold-dim);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--void);
+  letter-spacing: -.02em;
+}
+
+.bench-name {
+  display: grid;
+  line-height: 1.2;
+}
+.bench-name strong {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--parchment);
+  letter-spacing: .02em;
+}
+.bench-name small {
+  font-family: var(--font-label);
+  font-size: .60rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Assentos de navegação — os módulos da plataforma */
+.bench-seats {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 8px;
+  gap: 2px;
+}
+.bench-seats::-webkit-scrollbar { display: none; }
+
+.bench-seat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 16px;
+  min-width: 74px;
+  color: var(--ghost);
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  font-family: var(--font-label);
+  font-size: .60rem;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+  white-space: nowrap;
+}
+
+/* Ícone do assento — medalha/plaqueta */
+.bench-seat::before {
+  content: "";
+  display: block;
+  width: 22px;
+  height: 22px;
+  background-color: currentColor;
+  mask-image: var(--seat-icon, none);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  opacity: .6;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+/* Indicador de assento activo — linha dourada em baixo */
+.bench-seat::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 20%; right: 20%;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 999px 999px 0 0;
+  opacity: 0;
+  transform: scaleX(0);
+  transition:
+    opacity var(--dur-mid) var(--ease-out),
+    transform var(--dur-mid) var(--ease-spring);
+}
+
+.bench-seat:hover {
+  color: var(--muted);
+  background: rgba(201,168,76,.05);
+}
+.bench-seat:hover::before { opacity: 1; }
+
+.bench-seat.is-active {
+  color: var(--gold);
+  background: rgba(201,168,76,.07);
+}
+.bench-seat.is-active::before  { opacity: 1; }
+.bench-seat.is-active::after   { opacity: 1; transform: scaleX(1); }
+
+/* Painel do lado direito — sessão & utilizador */
+.bench-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 18px;
+  border-left: 1px solid var(--rule-gold);
+}
+
+/* Indicador "Em Sessão" */
+.session-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  background: rgba(30, 122, 96, .14);
+  border: 1px solid rgba(30, 122, 96, .28);
+  border-radius: 999px;
+  font-family: var(--font-label);
+  font-size: .62rem;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: #4fd1b0;
+}
+.session-pill::before {
+  content: "";
+  width: 6px; height: 6px;
+  background: #4fd1b0;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #4fd1b0;
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+.bench-avatar {
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--surface-raise), var(--surface-float));
+  border: 1px solid var(--rule-gold);
+  border-radius: 50%;
+  color: var(--gold);
+  font-family: var(--font-serif);
+  font-size: .96rem;
+  font-weight: 700;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.bench-avatar:hover { border-color: var(--gold); }
+
+
+/* ═══════════════════════════════════════════════════════════
+   6. ESPAÇO DE TRABALHO
+═══════════════════════════════════════════════════════════ */
+.workspace {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 32px 36px 80px;
+  overflow-x: clip;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   7. CABEÇALHO DE PÁGINA (Topbar / Hero)
+   Conceito: o estrado do tribunal — onde o juiz toma assento
+═══════════════════════════════════════════════════════════ */
+.court-header {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 108px;
+  padding: 22px 24px;
+  margin-bottom: 28px;
+  background:
+    linear-gradient(135deg,
+      rgba(201,168,76,.10) 0%,
+      rgba(201,168,76,.03) 38%,
+      transparent 60%),
+    linear-gradient(180deg,
+      rgba(30, 40, 60, .72),
+      rgba(15, 20, 36, .86));
+  border: 1px solid var(--rule-gold);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md), var(--shadow-gold);
+  animation: surface-in .44s var(--ease-out) both;
+}
+
+/* Padrão de linhas do estrado */
+.court-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,.014) 0 1px,
+    transparent 1px 40px
+  );
+  pointer-events: none;
+}
+
+/* Ornamento de página — ícone grande */
+.court-header::after {
+  content: "";
+  position: absolute;
+  right: 24px; top: 16px;
+  width: 76px; height: 76px;
+  background-color: var(--surface);
+  background-image:
+    var(--page-icon, url("icons/scales.svg")),
+    linear-gradient(135deg, var(--parchment) 0%, var(--gold) 52%, var(--gold-dim) 100%);
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-size: 44px 44px, cover;
+  border: 1px solid var(--rule-gold);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  animation: icon-float 6s ease-in-out infinite;
+}
+
+.court-header-copy {
+  position: relative;
+  z-index: 1;
+  max-width: min(680px, 72%);
+}
+
+.court-header-copy h1 {
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+.court-header-copy p {
+  margin: 6px 0 0;
+  font-size: .88rem;
+  max-width: 520px;
+}
+
+.court-header-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding-bottom: 2px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   8. SISTEMA DE BOTÕES
+═══════════════════════════════════════════════════════════ */
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+  cursor: pointer;
+}
+
+.btn-primary {
+  color: var(--void);
+  background: linear-gradient(135deg, var(--parchment), var(--gold-bright) 48%, var(--gold));
+  border-color: rgba(255,255,255,.22);
+  box-shadow: 0 8px 24px rgba(201,168,76,.22);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(201,168,76,.32);
+}
+
+.btn-secondary {
+  color: var(--ink);
+  background: rgba(201,168,76,.08);
+  border-color: var(--rule-gold);
+}
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  background: rgba(201,168,76,.13);
+  border-color: rgba(201,168,76,.44);
+}
+
+.btn-ghost {
+  color: var(--muted);
+  background: rgba(255,255,255,.04);
+  border-color: var(--rule);
+}
+.btn-ghost:hover {
+  color: var(--ink);
+  transform: translateY(-1px);
+  border-color: var(--rule-bright);
+}
+
+.btn-danger {
+  color: #fca5a5;
+  background: rgba(168,28,28,.10);
+  border-color: rgba(168,28,28,.24);
+}
+.btn-danger:hover {
+  background: rgba(168,28,28,.18);
+  border-color: rgba(168,28,28,.44);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   9. DOSSIERS — Cartões de Conteúdo
+   Conceito: cada card é uma folha de processo judicial
+   com margem dourada, numeração e carimbo de estado
+═══════════════════════════════════════════════════════════ */
+.dossier {
+  position: relative;
+  padding: 20px 20px 20px 24px;
+  background:
+    linear-gradient(145deg,
+      rgba(255,255,255,.055) 0%,
+      rgba(255,255,255,.018) 100%),
+    var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition:
+    transform var(--dur-mid) var(--ease-out),
+    border-color var(--dur-mid) var(--ease),
+    box-shadow var(--dur-mid) var(--ease);
+}
+
+/* Margem dourada lateral — como um processo em papel */
+.dossier::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 14%; bottom: 14%;
+  width: 3px;
+  background: linear-gradient(180deg, transparent, var(--gold), transparent);
+  border-radius: 0 999px 999px 0;
+  opacity: .7;
+  transition: opacity var(--dur-mid) var(--ease);
+}
+
+/* Linha inferior de acento */
+.dossier::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 18%; right: 18%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-rule), transparent);
+}
+
+.dossier:hover {
+  transform: translateY(-3px);
+  border-color: var(--rule-gold);
+  box-shadow: var(--shadow-lg), var(--shadow-gold);
+}
+.dossier:hover::before { opacity: 1; }
+
+/* Variante em destaque */
+.dossier.featured {
+  background:
+    radial-gradient(ellipse 80% 50% at 0% 0%,
+      rgba(201,168,76,.14) 0%,
+      transparent 52%),
+    linear-gradient(145deg,
+      rgba(255,255,255,.07),
+      rgba(255,255,255,.018)),
+    var(--surface);
+  border-color: var(--rule-gold);
+}
+
+/* Dossier compacto — para listas */
+.dossier-sm {
+  padding: 13px 14px 13px 20px;
+  border-radius: var(--r-md);
+}
+
+/* Dossier com fundo de processo — linhas de escrita */
+.dossier.lined {
+  background-image:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255,255,255,.022) 0 1px,
+      transparent 1px 32px
+    ),
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018)),
+    var(--surface);
+}
+
+.dossier h2 { margin-bottom: 8px; }
+.dossier h3 { margin-bottom: 6px; }
+.dossier p  { font-size: .86rem; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   10. PAINÉIS ESPECIAIS
+═══════════════════════════════════════════════════════════ */
+
+/* Painel de estrado — destaque principal de página */
+.podium-panel {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(260px, .62fr);
+  gap: 24px;
+  padding: 24px;
+  margin-bottom: 20px;
+  background:
+    linear-gradient(135deg,
+      rgba(201,168,76,.13) 0%,
+      rgba(201,168,76,.04) 30%,
+      transparent 56%),
+    rgba(var(--chamber), .9);
+  border: 1px solid var(--rule-gold);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Ornamento de câmara — grade atrás */
+.podium-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(135deg, #000 0%, transparent 66%);
+  pointer-events: none;
+}
+
+.podium-panel > * { position: relative; z-index: 1; }
+
+/* Painel de réplica — painel lateral informativo */
+.rebuttal-panel {
+  position: sticky;
+  top: 80px;
+  padding: 18px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.018)),
+    var(--surface-raise);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Painel de alerta — avisos judiciais */
+.verdict-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(201,168,76,.07);
+  border: 1px solid var(--gold-rule);
+  border-radius: var(--r-md);
+  margin-bottom: 16px;
+}
+
+.verdict-notice.error {
+  background: rgba(168,28,28,.08);
+  border-color: rgba(168,28,28,.24);
+}
+
+.verdict-notice.success {
+  background: rgba(30,122,96,.08);
+  border-color: rgba(30,122,96,.24);
+}
+
+.verdict-notice p { font-size: .84rem; margin: 0; }
+
+/* Tira de contexto — subtítulo de secção */
+.section-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule-gold);
+}
+
+.section-band h2 { margin: 0; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   11. GRELHAS DE LAYOUT
+═══════════════════════════════════════════════════════════ */
+
+/* Layout principal — tribunal em três zonas */
+.court-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, .30fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+/* Layout de audiência — bancada + estrado */
+.audience-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, .68fr);
+  gap: 18px;
+}
+
+/* Layout de instrução — galeria + palco */
+.study-layout {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+/* Painel de comandos — dashboard de 3 colunas */
+.command-row {
+  display: grid;
+  grid-template-columns: minmax(200px, .55fr) minmax(0, 1fr) minmax(200px, .55fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+/* Grelha de módulos — cards de ferramentas */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 12px;
+}
+
+/* Grelha de estatísticas — 4 colunas */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+/* Grelha compacta de 2 colunas */
+.two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.two-col.alt { grid-template-columns: minmax(240px,.38fr) minmax(0,.62fr); }
+
+
+/* ═══════════════════════════════════════════════════════════
+   12. CARTÕES DE MÓDULO — Ferramentas da plataforma
+   Cada ferramenta é uma "sala" do tribunal
+═══════════════════════════════════════════════════════════ */
+.module-card {
+  --mod-accent: var(--gold);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-height: 120px;
+  padding: 14px 14px 14px 18px;
+  padding-right: 56px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.016)),
+    var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--dur-mid) var(--ease-spring),
+    border-color var(--dur-mid) var(--ease),
+    background var(--dur-mid) var(--ease),
+    box-shadow var(--dur-mid) var(--ease);
+}
+
+/* Ícone do módulo — canto superior direito */
+.module-card::after {
+  content: "";
+  position: absolute;
+  right: 13px; top: 13px;
+  width: 34px; height: 34px;
+  background-color: var(--surface-float);
+  background-image:
+    var(--mod-icon, none),
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--mod-accent) 28%, var(--parchment)),
+      var(--mod-accent));
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-size: 20px 20px, cover;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: var(--r-md);
+  box-shadow: 0 6px 16px rgba(0,0,0,.28);
+  pointer-events: none;
+}
+
+/* Acento colorido em baixo */
+.module-card::before {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 14%; right: 14%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--mod-accent), transparent);
+  border-radius: 999px 999px 0 0;
+  opacity: .5;
+  transition: opacity var(--dur-mid) var(--ease);
+}
+
+.module-card:hover {
+  transform: translateY(-4px) scale(1.008);
+  border-color: color-mix(in srgb, var(--mod-accent) 44%, var(--rule));
+  box-shadow: var(--shadow-lg), 0 0 32px color-mix(in srgb, var(--mod-accent) 12%, transparent);
+}
+.module-card:hover::before { opacity: 1; }
+
+.module-card .eyebrow { margin-bottom: 4px; }
+.module-card strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--parchment);
+}
+.module-card p {
+  font-size: .78rem;
+  line-height: 1.42;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* Cores por módulo */
+.module-card[data-module="assistant"] { --mod-accent: var(--gold); }
+.module-card[data-module="trilho"]    { --mod-accent: #9fd2ff; }
+.module-card[data-module="sala"]      { --mod-accent: #ffd48a; }
+.module-card[data-module="pecas"]     { --mod-accent: #c7b8ff; }
+.module-card[data-module="conceitos"] { --mod-accent: #75d6cf; }
+.module-card[data-module="acordaos"]  { --mod-accent: #d4a8ff; }
+.module-card[data-module="casos"]     { --mod-accent: #8ee5dc; }
+.module-card[data-module="flashcard"] { --mod-accent: #ffa8c5; }
+.module-card[data-module="relatorio"] { --mod-accent: #a8d8ff; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   13. ESTATÍSTICAS — Contadores judiciais
+   Cada stat tem um acento colorido lateral como processo
+═══════════════════════════════════════════════════════════ */
+.stat-card {
+  position: relative;
+  padding: 14px 16px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.015)),
+    var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--gold);
+  overflow: hidden;
+  animation: surface-in var(--dur-slow) var(--ease-out) both;
+}
+.stat-card:nth-child(2) { border-left-color: #9fd2ff; }
+.stat-card:nth-child(3) { border-left-color: #75d6cf; }
+.stat-card:nth-child(4) { border-left-color: #c7b8ff; }
+
+.stat-card .eyebrow { margin-bottom: 6px; }
+.stat-card strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.72rem;
+  font-weight: 500;
+  color: var(--parchment);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-card small { color: var(--muted); }
+
+
+/* ═══════════════════════════════════════════════════════════
+   14. FORMULÁRIOS — Requerimentos judiciais
+═══════════════════════════════════════════════════════════ */
+.form-panel {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.016)),
+    var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field label {
+  font-family: var(--font-label);
+  font-size: .64rem;
+  font-weight: 600;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px;
+  color: var(--ink);
+  background: rgba(5, 6, 11, .72);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  font-size: .86rem;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+
+.field textarea { resize: vertical; min-height: 130px; }
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,.13);
+  outline: none;
+}
+
+.field input::placeholder,
+.field textarea::placeholder { color: var(--ghost); }
+
+/* Grelha de 2 campos lado-a-lado */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Área de ficheiros */
+.drop-zone {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 8px;
+  min-height: 120px;
+  padding: 20px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(201,168,76,.04) 0 1px,
+      transparent 1px 14px
+    ),
+    rgba(5, 6, 11, .40);
+  border: 1px dashed var(--rule-gold);
+  border-radius: var(--r-md);
+  text-align: center;
+  cursor: pointer;
+  transition: background var(--dur-mid) var(--ease);
+}
+.drop-zone:hover {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(201,168,76,.07) 0 1px,
+      transparent 1px 14px
+    ),
+    rgba(201,168,76,.04);
+}
+.drop-zone p { font-size: .82rem; margin: 0; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   15. CARIMBO DE ESTADO — Selos judiciais
+   Elemento decorativo único: círculo rotacionado como um carimbo
+═══════════════════════════════════════════════════════════ */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px; height: 58px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  font-family: var(--font-serif);
+  font-size: .56rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  transform: rotate(-15deg);
+  opacity: .7;
+  flex-shrink: 0;
+}
+
+.stamp.approved {
+  color: #4fd1b0;
+  border-color: #4fd1b0;
+  transform: rotate(-15deg);
+}
+.stamp.pending {
+  color: var(--gold);
+  border-color: var(--gold);
+  transform: rotate(-10deg);
+}
+.stamp.rejected {
+  color: #f87171;
+  border-color: #f87171;
+  transform: rotate(-18deg);
+}
+
+/* Badge de etiqueta — classificações de prioridade */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  background: var(--gold-pale);
+  border: 1px solid var(--gold-rule);
+  border-radius: 999px;
+  font-family: var(--font-label);
+  font-size: .64rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--gold);
+}
+.badge.blue   { background: rgba(138,180,255,.10); border-color: rgba(138,180,255,.22); color: #9fc6ff; }
+.badge.teal   { background: var(--emerald-pale);   border-color: rgba(30,122,96,.28);   color: #4fd1b0; }
+.badge.red    { background: var(--seal-pale);       border-color: rgba(168,28,28,.24);   color: #f87171; }
+.badge.violet { background: var(--violet-pale);     border-color: rgba(92,79,168,.24);   color: #c4b5fd; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   16. LISTA DE PROCESSOS — Itens de navegação lateral
+   Estilo: ficheiro de processos numerados
+═══════════════════════════════════════════════════════════ */
+.case-file-list {
+  display: grid;
+  gap: 6px;
+  counter-reset: case-num;
+}
+
+.case-file-item {
+  counter-increment: case-num;
+  position: relative;
+  display: grid;
+  gap: 3px;
+  padding: 11px 12px 11px 48px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease-spring);
+  width: 100%;
+  text-align: left;
+  color: inherit;
+}
+
+/* Número de processo */
+.case-file-item::before {
+  content: counter(case-num, decimal-leading-zero);
+  position: absolute;
+  left: 10px; top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  background: rgba(201,168,76,.10);
+  border: 1px solid var(--gold-rule);
+  border-radius: var(--r-sm);
+  font-family: var(--font-label);
+  font-size: .60rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.case-file-item:hover {
+  background: rgba(255,255,255,.04);
+  border-color: var(--rule);
+  transform: translateX(3px);
+}
+
+.case-file-item.is-active {
+  background: rgba(201,168,76,.07);
+  border-color: var(--rule-gold);
+  transform: translateX(4px);
+}
+
+.case-file-item strong {
+  font-size: .84rem;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.case-file-item small { color: var(--muted); font-size: .72rem; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   17. BARRA DE PROGRESSO — Balanças da Justiça
+   Uma barra horizontal que representa equilíbrio
+═══════════════════════════════════════════════════════════ */
+.scale-bar {
+  position: relative;
+  height: 6px;
+  margin: 12px 0;
+  background: rgba(255,255,255,.10);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.scale-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-bright));
+  border-radius: inherit;
+  transition: width .6s var(--ease-out);
+}
+
+/* Versão fina */
+.scale-bar.thin { height: 3px; }
+
+/* Com rótulos */
+.scale-labelled {
+  display: grid;
+  gap: 4px;
+}
+.scale-labelled-head {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-label);
+  font-size: .66rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   18. CHAT JUDICIAL — Assistente e Simulador
+═══════════════════════════════════════════════════════════ */
+.court-chat {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: calc(100vh - 140px);
+  min-height: 500px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.015)),
+    var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  background: rgba(7,9,15,.44);
+  border-bottom: 1px solid var(--rule-gold);
+}
+.chat-header h2 { margin: 0; font-size: 1rem; }
+
+.chat-body {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  overflow-y: auto;
+  padding: 22px clamp(16px,4vw,56px) 28px;
+  scroll-behavior: smooth;
+}
+
+/* Bolha de utilizador */
+.chat-bubble {
+  max-width: min(80%, 680px);
+  padding: 12px 15px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--rule);
+  font-size: .88rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.chat-bubble strong {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--font-label);
+  font-size: .66rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.chat-bubble p { margin: 0; color: var(--ink); }
+
+.chat-bubble.user {
+  justify-self: end;
+  background: rgba(255,255,255,.08);
+  border-color: var(--rule-bright);
+}
+.chat-bubble.assistant {
+  justify-self: start;
+  background: rgba(201,168,76,.06);
+  border-color: var(--rule-gold);
+}
+.chat-bubble.assistant strong { color: var(--gold); }
+
+/* Estado vazio */
+.chat-empty {
+  align-self: center;
+  justify-self: center;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 52px 24px;
+  text-align: center;
+  width: min(540px, 100%);
+}
+.chat-empty h2 { font-size: clamp(1.4rem, 2.8vw, 2.1rem); }
+.chat-empty p { max-width: 420px; }
+
+/* Composição */
+.chat-compose {
+  padding: 12px clamp(14px, 4vw, 52px) 18px;
+  background: linear-gradient(180deg, transparent, rgba(7,9,15,.64) 20%);
+  border-top: 1px solid var(--rule);
+}
+
+.compose-shell {
+  position: relative;
+}
+.compose-shell textarea {
+  width: 100%;
+  min-height: 52px;
+  max-height: 160px;
+  padding: 15px 54px 15px 18px;
+  color: var(--parchment);
+  background: rgba(5,6,11,.82);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-xl);
+  resize: none;
+  font-size: .88rem;
+  line-height: 1.5;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+.compose-shell textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,.12);
+}
+.compose-shell textarea::placeholder { color: var(--ghost); }
+
+.send-btn {
+  position: absolute;
+  right: 10px; bottom: 9px;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--parchment), var(--gold));
+  border: 0;
+  border-radius: var(--r-md);
+  color: var(--void);
+  font-size: 1rem;
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+.send-btn:hover { transform: scale(1.08); }
+
+/* Sugestões rápidas */
+.quick-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.quick-prompts button {
+  padding: 6px 12px;
+  background: var(--gold-pale);
+  border: 1px solid var(--gold-rule);
+  border-radius: 999px;
+  font-size: .76rem;
+  color: var(--gold);
+  transition:
+    background var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease-spring);
+}
+.quick-prompts button:hover {
+  background: rgba(201,168,76,.15);
+  transform: translateY(-1px);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   19. FLASHCARDS — Cartão de memória
+═══════════════════════════════════════════════════════════ */
+.flashcard-scene { perspective: 1400px; }
+
+.flashcard {
+  position: relative;
+  min-height: 280px;
+  padding: 24px;
+  background:
+    linear-gradient(145deg, rgba(201,168,76,.09), rgba(255,255,255,.018)),
+    var(--surface);
+  border: 1px solid var(--rule-gold);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  transform-style: preserve-3d;
+  transition: transform .6s var(--ease-out);
+  cursor: pointer;
+}
+.flashcard.is-flipped { transform: rotateY(180deg); }
+
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  padding: 24px;
+  backface-visibility: hidden;
+}
+.flashcard-back {
+  transform: rotateY(180deg);
+  background:
+    linear-gradient(145deg, rgba(30,122,96,.12), transparent),
+    var(--surface);
+  border-radius: inherit;
+}
+
+.flashcard-front strong {
+  font-family: var(--font-serif);
+  font-size: 1.24rem;
+  font-weight: 500;
+  color: var(--parchment);
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+.flashcard-back p { color: var(--ink); }
+
+/* Classificação de resposta */
+.grade-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+.grade-btn {
+  padding: 10px;
+  border-radius: var(--r-md);
+  font-size: .78rem;
+  font-weight: 600;
+  border: 1px solid var(--rule);
+  background: rgba(255,255,255,.04);
+  color: var(--muted);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.grade-btn:hover {
+  transform: translateY(-2px);
+  color: var(--ink);
+  background: rgba(255,255,255,.09);
+  border-color: var(--rule-bright);
+}
+.grade-btn.great  { color: #4fd1b0; border-color: rgba(30,122,96,.32); background: rgba(30,122,96,.09); }
+.grade-btn.good   { color: var(--gold); border-color: var(--gold-rule); background: var(--gold-pale); }
+.grade-btn.hard   { color: #f0a060; border-color: rgba(240,160,96,.28); background: rgba(240,160,96,.08); }
+.grade-btn.fail   { color: #f87171; border-color: rgba(168,28,28,.28); background: rgba(168,28,28,.08); }
+
+
+/* ═══════════════════════════════════════════════════════════
+   20. QUIZ — Perguntas de avaliação
+═══════════════════════════════════════════════════════════ */
+.quiz-panel {
+  padding: 22px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.015)),
+    var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.quiz-counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.quiz-counter span {
+  font-family: var(--font-label);
+  font-size: .66rem;
+  letter-spacing: .10em;
+  color: var(--muted);
+}
+
+.quiz-question {
+  margin-bottom: 18px;
+}
+.quiz-question h2 { font-size: 1.12rem; line-height: 1.38; }
+
+.quiz-options { display: grid; gap: 8px; }
+
+.quiz-opt {
+  width: 100%;
+  padding: 12px 14px;
+  text-align: left;
+  color: var(--ink);
+  background: rgba(5,6,11,.52);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  font-size: .86rem;
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.quiz-opt:hover {
+  transform: translateX(4px);
+  background: rgba(201,168,76,.07);
+  border-color: var(--rule-gold);
+}
+.quiz-opt.correct {
+  color: var(--void);
+  background: linear-gradient(135deg, #c8edd8, #4fd1b0);
+  border-color: transparent;
+}
+.quiz-opt.wrong {
+  color: #f87171;
+  background: rgba(168,28,28,.10);
+  border-color: rgba(168,28,28,.28);
+}
+
+.quiz-explanation {
+  margin-top: 14px;
+  padding: 14px;
+  background: rgba(201,168,76,.06);
+  border: 1px solid var(--rule-gold);
+  border-radius: var(--r-md);
+  font-size: .84rem;
+  color: var(--ink);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   21. BIBLIOTECA — Estante de recursos
+═══════════════════════════════════════════════════════════ */
+.library-shelf {
+  display: grid;
+  gap: 8px;
+  counter-reset: shelf;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-gold) transparent;
+}
+
+.shelf-item {
+  counter-increment: shelf;
+  position: relative;
+  display: grid;
+  gap: 5px;
+  padding: 13px 14px 13px 52px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+/* Numeração em coluna — como etiqueta de lombada */
+.shelf-item::before {
+  content: counter(shelf, decimal-leading-zero);
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 38px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, var(--gold-dim), rgba(120,90,32,.4));
+  border-radius: var(--r-md) 0 0 var(--r-md);
+  font-family: var(--font-label);
+  font-size: .64rem;
+  font-weight: 700;
+  color: var(--gold-bright);
+  writing-mode: vertical-rl;
+  letter-spacing: .05em;
+}
+
+.shelf-item:hover {
+  transform: translateX(4px);
+  border-color: var(--rule-gold);
+  background: var(--surface-raise);
+}
+.shelf-item.is-active {
+  border-color: var(--gold);
+  background: rgba(201,168,76,.06);
+}
+
+.shelf-item span {
+  font-family: var(--font-label);
+  font-size: .62rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.shelf-item strong {
+  font-size: .88rem;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.shelf-item small { color: var(--muted); }
+
+
+/* ═══════════════════════════════════════════════════════════
+   22. FILTROS E ABAS
+═══════════════════════════════════════════════════════════ */
+
+/* Filtros em pílulas */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+.filter-pill {
+  padding: 6px 13px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--font-label);
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease-spring);
+}
+.filter-pill:hover {
+  color: var(--ink);
+  background: rgba(255,255,255,.07);
+  border-color: var(--rule-bright);
+  transform: translateY(-1px);
+}
+.filter-pill.is-active {
+  color: var(--void);
+  background: linear-gradient(135deg, var(--parchment), var(--gold));
+  border-color: transparent;
+}
+
+/* Segmentado (tab toggle) */
+.segmented {
+  display: inline-flex;
+  background: rgba(5,6,11,.60);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 3px;
+  gap: 2px;
+}
+.seg-btn {
+  padding: 7px 14px;
+  border-radius: calc(var(--r-md) - 2px);
+  font-size: .80rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.seg-btn.is-active {
+  color: var(--void);
+  background: linear-gradient(135deg, var(--parchment), var(--gold-bright));
+}
+.seg-btn:not(.is-active):hover { color: var(--ink); }
+
+
+/* ═══════════════════════════════════════════════════════════
+   23. PAINEL COLAPSÁVEL — Secção dobrável
+═══════════════════════════════════════════════════════════ */
+.accordeon {
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.014)),
+    var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.accordeon > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  list-style: none;
+  cursor: pointer;
+}
+.accordeon > summary::-webkit-details-marker { display: none; }
+
+.accordeon > summary::after {
+  content: "＋";
+  font-family: var(--font-label);
+  font-size: .72rem;
+  color: var(--gold);
+  transition: transform var(--dur-mid) var(--ease-out);
+}
+.accordeon[open] > summary::after {
+  content: "－";
+  transform: rotate(180deg);
+}
+
+.accordeon > summary strong {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.accordeon-body {
+  padding: 0 18px 18px;
+  border-top: 1px solid var(--rule);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   24. RELATÓRIO — Painel de progresso semanal
+═══════════════════════════════════════════════════════════ */
+.report-command {
+  display: grid;
+  grid-template-columns: minmax(200px, .55fr) minmax(0, 1fr) minmax(200px, .55fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.report-score {
+  display: grid;
+  align-content: center;
+  padding: 20px;
+  background:
+    radial-gradient(ellipse 100% 60% at 0% 0%, rgba(201,168,76,.18), transparent 52%),
+    var(--surface-raise);
+  border: 1px solid var(--rule-gold);
+  border-radius: var(--r-xl);
+}
+
+.report-score strong {
+  font-family: var(--font-serif);
+  font-size: 3.2rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--gold-bright);
+}
+
+.kpi-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--rule);
+}
+.kpi-row:first-of-type { border-top: 0; padding-top: 0; }
+.kpi-row strong { font-size: .92rem; }
+.kpi-row span {
+  font-family: var(--font-label);
+  font-size: .64rem;
+  letter-spacing: .08em;
+  color: var(--muted);
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 12px;
+}
+.plan-item {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 16px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.015)),
+    var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  transition:
+    transform var(--dur-mid) var(--ease-out),
+    border-color var(--dur-mid) var(--ease);
+}
+.plan-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--rule-gold);
+}
+.plan-item .eyebrow { font-size: .60rem; }
+.plan-item strong { font-size: .96rem; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   25. ESTILOS DE PÁGINA — temas individuais
+═══════════════════════════════════════════════════════════ */
+.page-assistant { --page-accent: var(--gold);   --page-icon: url("icons/lawyer.svg"); }
+.page-trail     { --page-accent: #9fd2ff;        --page-icon: url("icons/compass.svg"); }
+.page-sala      { --page-accent: #ffd48a;        --page-icon: url("icons/book.svg"); }
+.page-pecas     { --page-accent: #c7b8ff;        --page-icon: url("icons/document.svg"); }
+.page-conceitos { --page-accent: #75d6cf;        --page-icon: url("icons/concept.svg"); }
+.page-acordaos  { --page-accent: #d4a8ff;        --page-icon: url("icons/scales.svg"); }
+.page-casos     { --page-accent: #8ee5dc;        --page-icon: url("icons/gavel.svg"); }
+.page-flashcard { --page-accent: #ffa8c5;        --page-icon: url("icons/flashcards.svg"); }
+
+/* Cada página colore o seu bench-seat activo */
+[class*="page-"] .bench-seat.is-active { color: var(--page-accent, var(--gold)); }
+[class*="page-"] .bench-seat.is-active::after { background: var(--page-accent, var(--gold)); }
+
+/* Topbar de página colorida */
+[class*="page-"] .court-header {
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--page-accent, var(--gold)) 15%, transparent),
+      rgba(201,168,76,.02) 40%,
+      transparent 62%),
+    linear-gradient(180deg,
+      rgba(30, 40, 60, .72),
+      rgba(15, 20, 36, .86));
+  border-color: color-mix(in srgb, var(--page-accent, var(--gold)) 32%, rgba(255,255,255,.08));
+}
+
+[class*="page-"] .btn-primary {
+  background: linear-gradient(135deg,
+    var(--parchment),
+    color-mix(in srgb, var(--page-accent, var(--gold)) 64%, var(--parchment)));
+}
+
+/* Decoração lateral de página — coluna vertical de ornamento */
+[class*="page-"] .workspace::before {
+  content: "";
+  position: fixed;
+  top: 100px;
+  right: max(22px, calc((100vw - 1200px) / 2));
+  z-index: -1;
+  width: 260px; height: 480px;
+  opacity: .10;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--page-accent, var(--gold)) 80%, transparent),
+      transparent),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.35) 0 1px,
+      transparent 1px 18px
+    );
+  mask-image: linear-gradient(180deg, #000, transparent);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   26. ANIMAÇÕES
+═══════════════════════════════════════════════════════════ */
+@keyframes surface-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
+  50%       { opacity: .6; box-shadow: 0 0 14px currentColor; }
+}
+
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,.0); }
+  50%       { box-shadow: 0 0 0 8px rgba(201,168,76,.0); }
+}
+
+/* Entrada escalonada para listas */
+.stagger > * {
+  animation: surface-in .36s var(--ease-out) both;
+}
+.stagger > *:nth-child(1) { animation-delay: .04s; }
+.stagger > *:nth-child(2) { animation-delay: .08s; }
+.stagger > *:nth-child(3) { animation-delay: .12s; }
+.stagger > *:nth-child(4) { animation-delay: .16s; }
+.stagger > *:nth-child(5) { animation-delay: .20s; }
+.stagger > *:nth-child(6) { animation-delay: .24s; }
+
+/* Estado de carregamento */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,.04) 25%,
+    rgba(255,255,255,.08) 50%,
+    rgba(255,255,255,.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease infinite;
+  border-radius: var(--r-sm);
+}
+@keyframes skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* Rotação de carregamento */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid var(--rule);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   27. UTILITÁRIOS
+═══════════════════════════════════════════════════════════ */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+}
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.text-gold  { color: var(--gold); }
+.text-muted { color: var(--muted); }
+.text-ink   { color: var(--ink); }
+.text-parch { color: var(--parchment); }
+.text-serif { font-family: var(--font-serif); }
+.text-mono  { font-family: var(--font-label); }
+
+.gap-8  { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.gap-20 { gap: 20px; }
+.mt-0   { margin-top: 0; }
+.mb-0   { margin-bottom: 0; }
+.mb-16  { margin-bottom: 16px; }
+.mb-24  { margin-bottom: 24px; }
+
+.d-grid { display: grid; }
+.d-flex { display: flex; align-items: center; }
+.d-flex.wrap { flex-wrap: wrap; }
+.ml-auto { margin-left: auto; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   28. RESPONSIVIDADE
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .court-layout,
+  .audience-layout,
+  .study-layout,
+  .command-row,
+  .report-command,
+  .podium-panel,
+  .two-col,
+  .two-col.alt {
+    grid-template-columns: 1fr;
+  }
+
+  .rebuttal-panel { position: static; }
+  .library-shelf  { max-height: none; }
+
+  .stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .module-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .plan-grid { grid-template-columns: 1fr; }
+
+  .court-header::after { display: none; }
+  .court-header-copy { max-width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .workspace { padding: 20px 18px 72px; }
+
+  .judicial-bench {
+    grid-template-columns: auto 1fr;
+    min-height: 54px;
+  }
+
+  .bench-name strong { font-size: .96rem; }
+  .bench-status { display: none; }
+
+  .bench-seats { padding: 0 4px; }
+  .bench-seat  {
+    min-width: 52px;
+    padding: 6px 10px;
+    font-size: .58rem;
+  }
+
+  h1 { font-size: 1.48rem; }
+  h2 { font-size: 1.04rem; }
+
+  .court-header {
+    min-height: auto;
+    padding: 18px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-row,
+  .report-command {
+    grid-template-columns: 1fr;
+  }
+
+  .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grade-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .chat-body { padding-inline: 14px; }
+  .chat-compose { padding-inline: 14px; }
+
+  .court-chat { height: auto; min-height: 0; }
+
+  [class*="page-"] .workspace::before { display: none; }
+}
+
+@media (max-width: 480px) {
+  .bench-seat::before { display: none; }
+  .bench-seat { min-width: 42px; font-size: 0; padding: 10px 8px; }
+  .bench-seat::after { display: none; }
+
+  /* Indicador de activo em ponto dourado */
+  .bench-seat.is-active::before {
+    display: block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    position: static;
+  }
+
+  .field-row { grid-template-columns: 1fr; }
+  .filter-bar { gap: 5px; }
+  .quick-prompts button { font-size: .70rem; padding: 5px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}  

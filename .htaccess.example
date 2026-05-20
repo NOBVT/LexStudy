@@ -1,0 +1,26 @@
+# Copia este ficheiro para ".htaccess" apenas no ambiente onde vai correr.
+# Nunca publiques uma chave real num repositório público.
+
+Options -Indexes
+DirectoryIndex index.php
+
+SetEnv APP_ENV "local"
+SetEnv APP_URL "http://localhost/Spector"
+SetEnv DB_HOST "localhost"
+SetEnv DB_NAME "lexstudy"
+SetEnv DB_USER "root"
+SetEnv DB_PASS ""
+SetEnv DB_CHARSET "utf8mb4"
+SetEnv GEMINI_API_KEY "A_TUA_CHAVE_GEMINI_AQUI"
+SetEnv GEMINI_MODEL "gemini-2.5-flash"
+
+<FilesMatch "(^\.|\.sql$|\.md$|\.example$|composer\.(json|lock)$|package(-lock)?\.json$|deploy-.*\.zip$)">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>

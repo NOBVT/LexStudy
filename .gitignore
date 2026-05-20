@@ -1,0 +1,11 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+.htaccess.local
+deploy-*.zip
+*.sql
+tmp/
+uploads/
+vendor/
+node_modules/

@@ -1,0 +1,15 @@
+.git
+.DS_Store
+.env
+.env.*
+!.env.example
+.htaccess.local
+deploy-*.zip
+*.sql
+AI_SETUP.md
+DEPLOYMENT.md
+RENDER_DEPLOYMENT.md
+tmp/
+uploads/
+vendor/
+node_modules/

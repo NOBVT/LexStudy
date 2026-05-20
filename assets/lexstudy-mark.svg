@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 110" role="img" aria-labelledby="title">
+  <title id="title">LexStudy monogram</title>
+  <defs>
+    <linearGradient id="gold" x1="18" y1="16" x2="158" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff1c7"/>
+      <stop offset=".46" stop-color="#e8c86a"/>
+      <stop offset="1" stop-color="#b58b32"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#gold)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M58 27c-24 0-41 17-41 39s17 37 41 37c17 0 31-8 39-22"/>
+    <path d="M96 81c8 14 24 22 42 18 21-4 34-20 32-39-2-20-18-33-39-33-20 0-36 12-42 31"/>
+    <path d="M55 58h88"/>
+    <path d="M143 58v28h-31"/>
+    <path d="M52 27v63h36"/>
+  </g>
+</svg>

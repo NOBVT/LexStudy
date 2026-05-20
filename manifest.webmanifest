@@ -1,0 +1,49 @@
+{
+  "name": "LexStudy - Estudo Jurídico",
+  "short_name": "LexStudy",
+  "description": "Plataforma pessoal de estudo jurídico com IA, revisão diária, casos práticos e flashcards.",
+  "start_url": "index.php",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071326",
+  "theme_color": "#071326",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/parliament-logo.png",
+      "sizes": "626x626",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Revisão do Dia",
+      "short_name": "Revisão",
+      "description": "Transformar matéria do dia em plano, quiz e casos.",
+      "url": "revisao.php",
+      "icons": [{ "src": "assets/parliament-logo.png", "sizes": "626x626" }]
+    },
+    {
+      "name": "Assistente Jurídico",
+      "short_name": "Assistente",
+      "description": "Abrir o professor IA jurídico.",
+      "url": "assistant.php",
+      "icons": [{ "src": "assets/parliament-logo.png", "sizes": "626x626" }]
+    },
+    {
+      "name": "Sala de Estudo",
+      "short_name": "Sala",
+      "description": "Aulas guiadas e trilho de aprendizagem.",
+      "url": "sala.php",
+      "icons": [{ "src": "assets/parliament-logo.png", "sizes": "626x626" }]
+    },
+    {
+      "name": "Modo Foco",
+      "short_name": "Foco",
+      "description": "Iniciar uma sessão concentrada.",
+      "url": "foco.php",
+      "icons": [{ "src": "assets/parliament-logo.png", "sizes": "626x626" }]
+    }
+  ]
+}
