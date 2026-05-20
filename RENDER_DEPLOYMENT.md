@@ -1,6 +1,17 @@
 # Publicar o LexStudy no Render
 
-Este projeto já está preparado para correr no Render com Docker. Continua a ser uma aplicação PHP + MySQL, por isso precisas de uma base de dados MySQL externa com o `lexstudy.sql` importado.
+Este projeto já está preparado para correr no Render com Docker. Continua a ser uma aplicação PHP + MySQL, por isso precisas de uma base de dados MySQL externa com o schema importado.
+
+## Rota gratuita recomendada
+
+Para manter tudo sem custo nesta fase:
+
+1. Mantem o serviço web `LexStudy` no plano grátis do Render.
+2. Cria uma base MySQL compatível num fornecedor com plano grátis, por exemplo TiDB Cloud Starter/Serverless.
+3. Coloca as credenciais dessa base nas variáveis de ambiente do Render.
+4. Importa `database/schema.sql` pela Shell do serviço no Render.
+
+Não recomendo criar MySQL dentro do Render enquanto o objetivo for custo zero. MySQL no Render precisa de serviço privado e disco persistente, e isso deixa de ser gratuito.
 
 ## O que foi preparado
 
@@ -15,7 +26,7 @@ Este projeto já está preparado para correr no Render com Docker. Continua a se
 1. Criar um repositório Git privado no GitHub, GitLab ou Bitbucket.
 2. Enviar este projeto para esse repositório.
 3. Criar uma base MySQL externa.
-4. Importar `lexstudy.sql` nessa base.
+4. Importar `database/schema.sql` nessa base.
 5. No Render, workspace `NOBVT`, criar um Blueprint a partir do repositório.
 6. Preencher as variáveis de ambiente no Render.
 
@@ -50,10 +61,13 @@ Obrigatórias:
 APP_ENV=production
 APP_URL=https://o-teu-servico.onrender.com
 DB_HOST=host-da-base-mysql
+DB_PORT=3306
 DB_NAME=nome-da-base
 DB_USER=utilizador
 DB_PASS=password
 DB_CHARSET=utf8mb4
+DB_SSL_MODE=
+DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt
 GEMINI_API_KEY=chave-da-api
 GEMINI_MODEL=gemini-2.5-flash
 ```
@@ -90,10 +104,19 @@ Depois de criares um MySQL acessível pelo serviço web, define no Render:
 
 ```text
 DB_HOST=mysql:3306
+DB_PORT=3306
 DB_NAME=lexstudy
 DB_USER=lexstudy
 DB_PASS=password-segura
 DB_CHARSET=utf8mb4
+```
+
+Para bases MySQL-compatíveis que exigem TLS, como TiDB Cloud Serverless, usa também:
+
+```text
+DB_PORT=4000
+DB_SSL_MODE=required
+DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt
 ```
 
 Depois abre a Shell do serviço `LexStudy` no Render e executa:

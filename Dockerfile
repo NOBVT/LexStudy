@@ -8,6 +8,7 @@ RUN apt-get update \
         libcurl4-openssl-dev \
         libonig-dev \
         libzip-dev \
+        ca-certificates \
     && docker-php-ext-install curl mbstring mysqli pdo_mysql zip \
     && a2enmod headers rewrite \
     && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \

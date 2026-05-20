@@ -87,17 +87,31 @@ function splitSqlStatements(string $sql): array
 }
 
 $host = envOrFail('DB_HOST');
+$port = getenv('DB_PORT') ?: '3306';
 $name = envOrFail('DB_NAME');
 $user = envOrFail('DB_USER');
 $pass = getenv('DB_PASS');
 $pass = $pass === false ? '' : $pass;
 $charset = getenv('DB_CHARSET') ?: 'utf8mb4';
+$sslMode = strtolower(getenv('DB_SSL_MODE') ?: '');
+$sslCa = getenv('DB_SSL_CA') ?: '/etc/ssl/certs/ca-certificates.crt';
 
-$dsn = "mysql:host={$host};dbname={$name};charset={$charset}";
-$pdo = new PDO($dsn, $user, $pass, [
+$dsn = "mysql:host={$host};port={$port};dbname={$name};charset={$charset}";
+$options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-]);
+];
+
+if ($sslMode !== '' && $sslMode !== 'disabled') {
+    if (defined('PDO::MYSQL_ATTR_SSL_CA') && $sslCa !== '') {
+        $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCa;
+    }
+    if (defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')) {
+        $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = $sslMode === 'verify';
+    }
+}
+
+$pdo = new PDO($dsn, $user, $pass, $options);
 
 $sql = file_get_contents($schemaPath);
 if ($sql === false) {
