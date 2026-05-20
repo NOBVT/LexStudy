@@ -84,6 +84,26 @@ https://o-teu-servico.onrender.com/health.php
 
 Este segundo teste só fica `ok: true` quando a base de dados estiver ligada e o schema estiver importado.
 
+## Importar a base de dados
+
+Depois de criares um MySQL acessível pelo serviço web, define no Render:
+
+```text
+DB_HOST=mysql:3306
+DB_NAME=lexstudy
+DB_USER=lexstudy
+DB_PASS=password-segura
+DB_CHARSET=utf8mb4
+```
+
+Depois abre a Shell do serviço `LexStudy` no Render e executa:
+
+```bash
+php scripts/import_database.php
+```
+
+O script importa `database/schema.sql` para a base indicada nas variáveis de ambiente. Não uses este comando sem confirmar que estás ligado à base de produção correta.
+
 ## Nota direta
 
-O Render não resolve sozinho a parte MySQL deste projeto. O site PHP fica online no Render, mas os dados precisam de uma base MySQL externa. Migrar para PostgreSQL seria outro projeto, porque o código usa SQL específico de MySQL.
+O Render suporta MySQL como serviço privado com Docker e disco persistente, mas isso pode ter custo. O site PHP fica online no Render, mas os dados precisam desse MySQL configurado. Migrar para PostgreSQL seria outro projeto, porque o código usa SQL específico de MySQL.

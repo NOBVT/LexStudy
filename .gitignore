@@ -5,6 +5,7 @@
 .htaccess.local
 deploy-*.zip
 *.sql
+!database/schema.sql
 tmp/
 uploads/
 vendor/
