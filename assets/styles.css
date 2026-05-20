@@ -212,6 +212,10 @@ button {
     --app-icon: url("icons/compass.svg");
 }
 
+.nav-list a[href*="missoes.php"] {
+    --app-icon: url("icons/compass.svg");
+}
+
 .nav-list a[href*="sala.php"] {
     --app-icon: url("icons/book.svg");
 }
@@ -8640,6 +8644,245 @@ body[data-network="offline"]::before {
     }
 }
 
+.mission-teaser {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 24px;
+    padding: 18px 20px;
+    background:
+        radial-gradient(circle at 0 0, rgba(117, 214, 207, .16), transparent 42%),
+        linear-gradient(135deg, rgba(255, 255, 255, .075), rgba(255, 255, 255, .022)),
+        rgba(12, 20, 30, .78);
+    border: 1px solid rgba(117, 214, 207, .22);
+    border-radius: 16px;
+    box-shadow: 0 18px 52px rgba(0, 0, 0, .24);
+}
+
+.mission-teaser h2 {
+    margin: 5px 0 6px;
+}
+
+.mission-teaser p {
+    max-width: 620px;
+    margin-bottom: 0;
+}
+
+.mission-command,
+.mission-layout,
+.weekly-mission-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.mission-command {
+    grid-template-columns: minmax(220px, .72fr) minmax(0, 1.1fr) minmax(220px, .78fr);
+    margin-bottom: 16px;
+}
+
+.mission-layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+    margin-bottom: 24px;
+}
+
+.mission-score,
+.mission-next,
+.mission-signal,
+.mission-panel,
+.weekly-mission {
+    position: relative;
+    overflow: hidden;
+    padding: 18px;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, .065), rgba(255, 255, 255, .018)),
+        var(--surface);
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 14px;
+    box-shadow: 0 20px 58px rgba(0, 0, 0, .26);
+}
+
+.mission-score {
+    background:
+        radial-gradient(circle at 50% 0, rgba(138, 180, 255, .22), transparent 56%),
+        linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .018)),
+        var(--surface);
+}
+
+.mission-score strong {
+    display: block;
+    margin: 6px 0 3px;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1;
+}
+
+.mission-score p,
+.mission-next p,
+.mission-signal p {
+    margin-bottom: 12px;
+}
+
+.mission-next,
+.mission-signal {
+    display: grid;
+    align-content: start;
+}
+
+.mission-next h2,
+.mission-signal h2,
+.mission-panel h2 {
+    margin: 7px 0 8px;
+}
+
+.mission-next .notice-link,
+.mission-signal .notice-link {
+    margin-left: 0;
+}
+
+.mission-list {
+    display: grid;
+    gap: 10px;
+}
+
+.mission-item {
+    position: relative;
+    display: grid;
+    gap: 4px;
+    min-height: 104px;
+    padding: 14px 14px 14px 52px;
+    background: rgba(4, 8, 14, .40);
+    border: 1px solid rgba(255, 255, 255, .11);
+    border-radius: 12px;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.mission-item::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 18px;
+    width: 23px;
+    height: 23px;
+    border: 1px solid rgba(255, 255, 255, .30);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .06);
+}
+
+.mission-item.is-done {
+    border-color: rgba(117, 214, 207, .40);
+    background: rgba(117, 214, 207, .10);
+}
+
+.mission-item.is-done::before {
+    content: "✓";
+    display: grid;
+    place-items: center;
+    color: #061014;
+    background: #75d6cf;
+    border-color: #75d6cf;
+    font-size: .8rem;
+    font-weight: 950;
+}
+
+.mission-item:hover,
+.weekly-mission:hover {
+    transform: translateY(-2px);
+    border-color: rgba(138, 180, 255, .34);
+}
+
+.mission-item span,
+.weekly-mission span {
+    color: #9fc6ff;
+    font-size: .68rem;
+    font-weight: 850;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.mission-item strong,
+.weekly-mission strong {
+    font-size: .94rem;
+}
+
+.mission-item small,
+.weekly-mission small {
+    line-height: 1.36;
+}
+
+.mission-item em,
+.weekly-mission em {
+    color: #eef7ff;
+    font-style: normal;
+    font-size: .72rem;
+    font-weight: 850;
+}
+
+.mission-panel.ritual {
+    align-self: start;
+    background:
+        radial-gradient(circle at 100% 0, rgba(255, 212, 138, .14), transparent 44%),
+        linear-gradient(145deg, rgba(255, 255, 255, .065), rgba(255, 255, 255, .018)),
+        var(--surface);
+}
+
+.ritual-steps {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.ritual-steps div {
+    display: grid;
+    gap: 4px;
+    padding: 12px;
+    background: rgba(4, 8, 14, .40);
+    border: 1px solid rgba(255, 255, 255, .11);
+    border-radius: 10px;
+}
+
+.ritual-steps span {
+    width: fit-content;
+    padding: 3px 7px;
+    color: #111;
+    background: #f4f4f4;
+    border-radius: 999px;
+    font-size: .66rem;
+    font-weight: 900;
+}
+
+.weekly-mission-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.weekly-mission {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    min-height: 190px;
+}
+
+.weekly-mission .meter {
+    margin-top: auto;
+}
+
+@media (max-width: 1100px) {
+    .mission-command,
+    .mission-layout,
+    .weekly-mission-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .mission-teaser {
+        display: grid;
+    }
+
+    .mission-teaser .primary-btn {
+        width: 100%;
+    }
+}
+
 .assistant-empty-mark {
     width: 88px;
     height: 54px;
@@ -8662,6 +8905,7 @@ body[data-network="offline"]::before {
 .mentor-hero::after,
 .report-hero::before,
 .focus-hero::before,
+.missions-hero::before,
 .page-drafts .topbar::before,
 .page-concepts .topbar::before,
 .page-judgments .topbar::before,
@@ -8724,6 +8968,7 @@ body,
     .mentor-hero,
     .focus-hero,
     .report-hero,
+    .missions-hero,
     .tools-hero,
     .mobile-access-hero,
     .disciplines-hero,
@@ -8745,6 +8990,7 @@ body,
     .mentor-hero > div:first-child,
     .focus-hero > div:first-child,
     .report-hero > div:first-child,
+    .missions-hero > div:first-child,
     .tools-hero > div:first-child,
     .mobile-access-hero > div:first-child,
     .disciplines-hero > div:first-child {
@@ -8763,6 +9009,7 @@ body,
     .mentor-hero h1,
     .focus-hero h1,
     .report-hero h1,
+    .missions-hero h1,
     .tools-hero h1,
     .mobile-access-hero h1,
     .disciplines-hero h1 {
@@ -8783,6 +9030,7 @@ body,
     .mentor-hero p,
     .focus-hero p,
     .report-hero p,
+    .missions-hero p,
     .tools-hero p,
     .mobile-access-hero p,
     .disciplines-hero p {

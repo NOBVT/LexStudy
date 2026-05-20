@@ -28,7 +28,7 @@ foreach ($data['methods'] as $method) {
     $methodsByTarget[$method['target']] = $method;
 }
 $toolGroups = [
-    'Orientação' => ['comecar.php', 'plano.php', 'disciplinas.php', 'materia.php', 'sala.php', 'revisao.php', 'trilho.php', 'dominio.php', 'relatorio.php', 'foco.php'],
+    'Orientação' => ['missoes.php', 'comecar.php', 'plano.php', 'disciplinas.php', 'materia.php', 'sala.php', 'revisao.php', 'trilho.php', 'dominio.php', 'relatorio.php', 'foco.php'],
     'IA e correção' => ['assistant.php', 'exame.php', 'acordaos.php', 'simulator.php'],
     'Produção jurídica' => ['mentor.php', 'pesquisa.php', 'teses.php', 'pecas.php', 'conceitos.php'],
     'Treino e revisão' => ['cases.php', 'flashcards.php', 'caderno.php', 'library.php'],
@@ -87,6 +87,7 @@ $toolGroups = [
                     <h1>Estuda Direito com menos ruído.</h1>
                 </div>
                 <div class="top-actions">
+                    <a class="ghost-btn" href="missoes.php">Missões</a>
                     <a class="ghost-btn" href="#diagnostico">Diagnóstico</a>
                     <a class="ghost-btn" href="ferramentas.php">Ferramentas</a>
                     <a class="ghost-btn" href="relatorio.php">Relatório</a>
@@ -186,6 +187,15 @@ $toolGroups = [
                     <p><?= e($weakestCompetency['next'] ?? 'Começa pelo diagnóstico e segue uma rotina curta.') ?></p>
                     <a class="notice-link" href="<?= e($weakestCompetency['target'] ?? 'dominio.php') ?>">Treinar ponto fraco</a>
                 </article>
+            </section>
+
+            <section class="mission-teaser" aria-label="Missões jurídicas">
+                <div>
+                    <span class="eyebrow">Missões jurídicas</span>
+                    <h2>Transforma o estudo em objetivos diários.</h2>
+                    <p>Aulas, revisão, casos, memória e perguntas à IA num quadro simples de progresso.</p>
+                </div>
+                <a class="primary-btn" href="missoes.php">Abrir missões</a>
             </section>
 
             <section id="diagnostico" class="diagnostic-layout" aria-label="Diagnóstico inicial e plano personalizado">

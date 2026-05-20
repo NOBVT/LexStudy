@@ -111,6 +111,12 @@ function appData(): array
         ],
         'methods' => [
             [
+                'name' => 'Missões Jurídicas',
+                'meta' => 'Rotina diária',
+                'description' => 'Transforma o estudo em objetivos claros: aula, revisão, treino, memória e escrita.',
+                'target' => 'missoes.php',
+            ],
+            [
                 'name' => 'Começar do Zero',
                 'meta' => 'Entrada guiada',
                 'description' => 'Aprende o essencial antes do curso: ler leis, perceber fontes e resolver o primeiro caso.',
@@ -2338,6 +2344,178 @@ function weeklyStudyReport(?int $userId, array $state, ?array $profile): array
         'usage' => [
             'assistant_today' => $assistantToday,
             'teacher_today' => $teacherToday,
+        ],
+    ];
+}
+
+function missionStatus(int $current, int $goal): array
+{
+    $goal = max(1, $goal);
+    $percent = clampScore(($current / $goal) * 100);
+
+    return [
+        'current' => $current,
+        'goal' => $goal,
+        'percent' => $percent,
+        'done' => $current >= $goal,
+    ];
+}
+
+function studyMissionBoard(?int $userId, array $state, ?array $profile): array
+{
+    $domain = getStudyDomainMap($userId, $state, $profile);
+    $mistakes = studyMistakeStats($userId);
+
+    $today = [
+        'lessons' => completedLessonsSince($userId, 1),
+        'reviews' => countUserRowsSince($userId, 'daily_study_reviews', 'created_at', '', 1)
+            + countUserRowsSince($userId, 'daily_review_attempts', 'created_at', '', 1),
+        'practice' => countUserRowsSince($userId, 'case_sessions', 'updated_at', 'completed = 1', 1)
+            + countUserRowsSince($userId, 'legal_exam_sessions', 'evaluated_at', 'evaluated_at IS NOT NULL', 1)
+            + countUserRowsSince($userId, 'quiz_attempts', 'created_at', '', 1)
+            + countUserRowsSince($userId, 'virtual_judge_chats', 'updated_at', 'completed = 1', 1),
+        'memory' => countUserRowsSince($userId, 'flashcard_progress', 'last_reviewed', 'last_reviewed IS NOT NULL', 1)
+            + countUserRowsSince($userId, 'study_mistakes', 'updated_at', 'status = "resolved"', 1),
+        'questions' => countAssistantMessagesSince($userId, 1) + countAiUsageSince($userId, 'teacher_question', 1),
+    ];
+
+    $week = [
+        'lessons' => completedLessonsSince($userId, 7),
+        'cases' => countUserRowsSince($userId, 'case_sessions', 'updated_at', 'completed = 1', 7)
+            + countUserRowsSince($userId, 'virtual_judge_chats', 'updated_at', 'completed = 1', 7),
+        'writing' => countUserRowsSince($userId, 'legal_drafts', 'created_at', '', 7)
+            + countUserRowsSince($userId, 'legal_thesis_labs', 'created_at', '', 7)
+            + countUserRowsSince($userId, 'legal_research_guides', 'created_at', '', 7),
+        'sources' => countUserRowsSince($userId, 'judgment_summaries', 'created_at', '', 7)
+            + countUserRowsSince($userId, 'legal_sources', 'created_at', '', 7),
+        'memory' => countUserRowsSince($userId, 'flashcard_progress', 'last_reviewed', 'last_reviewed IS NOT NULL', 7)
+            + countUserRowsSince($userId, 'study_mistakes', 'updated_at', 'status = "resolved"', 7),
+    ];
+
+    $dailyMissions = [
+        [
+            'key' => 'review',
+            'label' => '01 · Rever',
+            'title' => 'Criar a revisão do dia',
+            'detail' => 'Cola apontamentos ou um PDF/TXT e transforma a aula em resumo, perguntas e flashcards.',
+            'target' => 'revisao.php',
+            'xp' => 40,
+            ...missionStatus($today['reviews'], 1),
+        ],
+        [
+            'key' => 'lesson',
+            'label' => '02 · Base',
+            'title' => 'Concluir uma aula curta',
+            'detail' => 'Sem base teórica, casos práticos viram tentativa. Faz uma aula antes do treino pesado.',
+            'target' => 'sala.php',
+            'xp' => 60,
+            ...missionStatus($today['lessons'], 1),
+        ],
+        [
+            'key' => 'practice',
+            'label' => '03 · Aplicar',
+            'title' => 'Resolver um caso ou mini-exame',
+            'detail' => 'Treina factos, norma, aplicação e conclusão. É aqui que Direito começa a entrar.',
+            'target' => 'cases.php',
+            'xp' => 80,
+            ...missionStatus($today['practice'], 1),
+        ],
+        [
+            'key' => 'memory',
+            'label' => '04 · Fixar',
+            'title' => 'Rever memória ou fechar um erro',
+            'detail' => 'Cinco minutos de recuperação ativa valem mais do que reler a mesma página.',
+            'target' => $mistakes['open'] > 0 ? 'caderno.php' : 'flashcards.php',
+            'xp' => 30,
+            ...missionStatus($today['memory'], 1),
+        ],
+        [
+            'key' => 'question',
+            'label' => '05 · Perguntar',
+            'title' => 'Fazer uma pergunta precisa à IA',
+            'detail' => 'Pede um exemplo, uma exceção ou uma correção. Perguntas vagas gastam limite e ensinam pouco.',
+            'target' => 'assistant.php',
+            'xp' => 20,
+            ...missionStatus($today['questions'], 1),
+        ],
+    ];
+
+    $weeklyMissions = [
+        [
+            'label' => 'Aulas',
+            'title' => '3 aulas concluídas',
+            'detail' => 'Base mínima para a semana não depender só de respostas soltas da IA.',
+            'target' => 'sala.php',
+            ...missionStatus($week['lessons'], 3),
+        ],
+        [
+            'label' => 'Casos',
+            'title' => '2 casos ou simulações',
+            'detail' => 'Treino real de raciocínio jurídico, com pressão controlada.',
+            'target' => 'cases.php',
+            ...missionStatus($week['cases'], 2),
+        ],
+        [
+            'label' => 'Escrita',
+            'title' => '1 peça, tese ou roteiro',
+            'detail' => 'Escrever obriga a organizar a cabeça e expõe falhas rapidamente.',
+            'target' => 'pecas.php',
+            ...missionStatus($week['writing'], 1),
+        ],
+        [
+            'label' => 'Fontes',
+            'title' => '1 acórdão ou fonte guardada',
+            'detail' => 'Começa cedo a ligar teoria a decisões e fontes reais.',
+            'target' => 'acordaos.php',
+            ...missionStatus($week['sources'], 1),
+        ],
+        [
+            'label' => 'Memória',
+            'title' => '10 revisões ativas',
+            'detail' => 'Flashcards e erros fechados mantêm a matéria viva.',
+            'target' => 'flashcards.php',
+            ...missionStatus($week['memory'], 10),
+        ],
+    ];
+
+    $doneToday = count(array_filter($dailyMissions, static fn(array $mission): bool => (bool)$mission['done']));
+    $todayPercent = clampScore(($doneToday / max(1, count($dailyMissions))) * 100);
+    $nextMission = null;
+    foreach ($dailyMissions as $mission) {
+        if (!$mission['done']) {
+            $nextMission = $mission;
+            break;
+        }
+    }
+
+    $weakest = $domain['weakest'] ?? [
+        'name' => 'Orientação',
+        'target' => 'sala.php',
+        'next' => 'Começa por uma aula introdutória.',
+    ];
+
+    $phase = 'Arranque';
+    if ($todayPercent >= 80) {
+        $phase = 'Dia forte';
+    } elseif ($todayPercent >= 40) {
+        $phase = 'Em curso';
+    }
+
+    return [
+        'phase' => $phase,
+        'today_percent' => $todayPercent,
+        'done_today' => $doneToday,
+        'total_today' => count($dailyMissions),
+        'daily' => $dailyMissions,
+        'weekly' => $weeklyMissions,
+        'next' => $nextMission ?? $dailyMissions[0],
+        'weakest' => $weakest,
+        'open_mistakes' => $mistakes['open'],
+        'ritual' => [
+            ['time' => '3 min', 'title' => 'Recuperar', 'detail' => 'Escreve de memória o que ficou da última sessão.'],
+            ['time' => '8 min', 'title' => 'Aplicar', 'detail' => 'Resolve um caso, pergunta ou exercício curto.'],
+            ['time' => '6 min', 'title' => 'Corrigir', 'detail' => 'Compara a resposta com os requisitos jurídicos.'],
+            ['time' => '3 min', 'title' => 'Guardar', 'detail' => 'Fecha um erro, cria uma carta ou planeia a próxima missão.'],
         ],
     ];
 }

@@ -17,7 +17,7 @@ foreach ($data['methods'] as $method) {
 }
 
 $toolGroups = [
-    'Orientação e método' => ['comecar.php', 'plano.php', 'disciplinas.php', 'materia.php', 'revisao.php', 'trilho.php', 'dominio.php', 'mentor.php'],
+    'Orientação e método' => ['missoes.php', 'comecar.php', 'plano.php', 'disciplinas.php', 'materia.php', 'revisao.php', 'trilho.php', 'dominio.php', 'mentor.php'],
     'Investigação e escrita' => ['pesquisa.php', 'teses.php', 'pecas.php', 'conceitos.php', 'library.php', 'acordaos.php'],
     'Treino e revisão' => ['exame.php', 'simulator.php', 'cases.php', 'flashcards.php', 'caderno.php'],
     'Sistema' => ['telemovel.php', 'billing.php', 'lexium-preview.php'],
